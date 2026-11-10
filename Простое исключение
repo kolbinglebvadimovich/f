@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string>
+
+class bad_length : public std::exception 
+{
+public:
+    const char* what() const noexcept override 
+    {
+        return "Длина строки равна запретной!";
+    }
+};
+
+int function(std::string str, int forbidden_length) 
+{
+    if (str.length() == static_cast<size_t>(forbidden_length)) 
+    {
+        throw bad_length();
+    }
+    return static_cast<int>(str.length());
+}
+
+int main() 
+{
+    setlocale(LC_ALL, "Russian");
+
+    int forbidden_length = 0;
+    std::cout << "Введите запретную длину: " << std::endl;
+    std::cin >> forbidden_length;
+
+    std::string word;
+    while (true) 
+    {
+        std::cout << "Введите слово: ";
+        std::cin >> word;
+
+        try 
+        {
+            int length = function(word, forbidden_length);
+            std::cout << "Длина слова \"" << word << "\" равна " << length << std::endl;
+        } catch (const bad_length& e) 
+        {
+            std::cout << "Вы ввели слово запретной длины! До свидания" << std::endl;
+            break;
+        }
+    }
+
+    return 0;
+}
