@@ -3,16 +3,12 @@
 #ifndef GEOMETRICEXCEPTION_H
 #define GEOMETRICEXCEPTION_H
 
-class GeometricException : public std::exception 
+#include <stdexcept>
+
+class GeometricException : public std::domain_error
 {
-private:
-    std::string message;
 public:
-    GeometricException(const std::string& msg) : message(msg) {}
-    const char* what() const noexcept override 
-    {
-        return message.c_str();
-    }
+    GeometricException(const std::string& msg) : std::domain_error(msg) {}
 };
 
 #endif
@@ -24,6 +20,8 @@ public:
 
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
+
+#include "GeometricException.h"
 
 #include "GeometricException.h"
 
@@ -42,7 +40,7 @@ public:
 3 Triangle.cpp
 
 
-м#include "Triangle.h"
+#include "Triangle.h"
 #include <iostream>
 
 Triangle::Triangle(double a, double b, double c, double A, double B, double C) 
@@ -73,11 +71,61 @@ int main()
     {
         double sides[] = {3, 4, 5};
         double angles[] = {30, 60, 90};
-        Triangle tri(sides[0], sides[1], sides[2], angles[0], angles[1], angles[2]) catch (const GeometricException& e);
-    } 
+        Triangle tri(sides[0], sides[1], sides[2], angles[0], angles[1], angles[2]);
+    } catch (const GeometricException& e) 
+    {
+        std::cerr << "Ошибка: " << e.what() << std::endl;
+    }
+
+    try 
+    {
+        double sides2[] = {6, 8, 10};
+        double angles2[] = {30, 60, 90};
+        Triangle rightTri(sides2[0], sides2[1], sides2[2], angles2[0], angles2[1], angles2[2]);
+    } catch (const GeometricException& e) 
     {
         std::cerr << "Ошибка: " << e.what() << std::endl;
     }
 
     return 0;
+}
+
+5. Другие фигуры (пример для Прямоугольника)
+
+cpp
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
+#include "GeometricException.h"
+
+class Rectangle 
+{
+private:
+    double sides[4];
+public:
+    Rectangle(double a, double b);
+    void print() const;
+};
+
+#endif
+
+6. Прямоугольник.cpp
+
+cpp
+#include "Rectangle.h"
+#include <iostream>
+
+Rectangle::Rectangle(double a, double b)
+{
+    if (a <= 0 || b <= 0) 
+    {
+        throw GeometricException("Ошибка создания прямоугольника: стороны не могут быть отрицательными");
+    }
+    sides[0] = a; sides[1] = b; sides[2] = a; sides[3] = b;
+    print();
+}
+
+void Rectangle::print() const 
+{
+    std::cout << "Прямоугольник (стороны: " << sides[0] << ", " << sides[1] << ") создан\n" << std::endl;
 }
