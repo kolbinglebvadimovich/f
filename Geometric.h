@@ -1,14 +1,9 @@
-1 GeometricException.h
+#include <string>
 
-#ifndef GEOMETRICEXCEPTION_H
-#define GEOMETRICEXCEPTION_H
-
-#include <stdexcept>
-
-class GeometricException : public std::domain_error
-{
+class GeometricException {
 public:
-    GeometricException(const std::string& msg) : std::domain_error(msg) {}
+    GeometricException(const std::string& message) : message_(message) {}
+    const std::string& what() const { return message_; }
+private:
+    std::string message_;
 };
-
-#endif
