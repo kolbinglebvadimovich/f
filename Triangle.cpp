@@ -1,39 +1,14 @@
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#include "Triangle.h"
 
-#include <iostream>
-#include <string>
-
-class Triangle 
+class RightTriangle : public Triangle 
 {
-protected:
-    double sides[3];
-    double angles[3];
-
 public:
-    Triangle(double a, double b, double c, double A, double B, double C)
-        : sides{a, b, c}, angles{A, B, C} 
+    RightTriangle(double a, double b, double c, double A, double B, double C)
+        : Triangle(a, b, c, A, B, C) 
     {
-        validateSides();
-        validateAngles();
-    }
-
-    virtual ~Triangle() = default;
-
-    void validateSides() {
-        if (sides[0] <= 0 || sides[1] <= 0 || sides[2] <= 0) 
+        if (C != 90) 
         {
-            throw GeometricException("Side lengths cannot be zero or negative");
-        }
-    }
-
-    void validateAngles() 
-    {
-        if (angles[0] + angles[1] + angles[2] != 180) 
-        {
-            throw GeometricException("Sum of angles is not 180 degrees");
+            throw GeometricException("Right angle is not 90 degrees");
         }
     }
 };
-
-#endif
