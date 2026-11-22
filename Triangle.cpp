@@ -1,18 +1,39 @@
-#include "Triangle.h"
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
+
 #include <iostream>
+#include <string>
 
-Triangle::Triangle(double a, double b, double c, double A, double B, double C) 
+class Triangle 
 {
-    if (a <= 0 || b <= 0 || c <= 0 || A + B + C != 180) 
+protected:
+    double sides[3];
+    double angles[3];
+
+public:
+    Triangle(double a, double b, double c, double A, double B, double C)
+        : sides{a, b, c}, angles{A, B, C} 
     {
-        throw GeometricException("Ошибка создания треугольника: сумма углов не равна 180");
+        validateSides();
+        validateAngles();
     }
-    sides[0] = a; sides[1] = b; sides[2] = c;
-    angles[0] = A; angles[1] = B; angles[2] = C;
-    print();
-}
 
-void Triangle::print() const 
-{
-    std::cout << "Треугольник (стороны: " << sides[0] << ", " << sides[1] << ", " << sides[2] << "; углы: " << angles[0] << ", " << angles[1] << ", " << angles[2] << ") создан\n" << std::endl;
-}
+    virtual ~Triangle() = default;
+
+    void validateSides() {
+        if (sides[0] <= 0 || sides[1] <= 0 || sides[2] <= 0) 
+        {
+            throw GeometricException("Side lengths cannot be zero or negative");
+        }
+    }
+
+    void validateAngles() 
+    {
+        if (angles[0] + angles[1] + angles[2] != 180) 
+        {
+            throw GeometricException("Sum of angles is not 180 degrees");
+        }
+    }
+};
+
+#endif
